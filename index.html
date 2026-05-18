@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Säuren – Chemie Klasse 9</title>
+  <style>
+    :root {
+      --primary: #e63946;
+      --primary-dark: #c1121f;
+      --secondary: #457b9d;
+      --bg: #f1faee;
+      --card-bg: #ffffff;
+      --text: #1d3557;
+      --muted: #6c757d;
+      --success: #2a9d8f;
+      --warning: #e9c46a;
+      --danger: #e76f51;
+      --border: #dee2e6;
+      --shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--primary);
+      color: white;
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .nav-title {
+      padding: 14px 20px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    .nav-tabs {
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .nav-tab {
+      padding: 12px 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      color: rgba(255,255,255,0.8);
+    }
+    .nav-tab:hover { background: rgba(255,255,255,0.1); color: white; }
+    .nav-tab.active { border-bottom-color: white; color: white; background: rgba(255,255,255,0.15); }
+
+    /* SECTIONS */
+    .section { display: none; padding: 24px 20px; max-width: 900px; margin: 0 auto; }
+    .section.active { display: block; }
+
+    h1 { font-size: 1.8rem; color: var(--primary); margin-bottom: 8px; }
+    h2 { font-size: 1.3rem; color: var(--secondary); margin: 24px 0 12px; }
+    h3 { font-size: 1.1rem; color: var(--text); margin: 16px 0 8px; }
+    p { margin-bottom: 10px; }
+
+    /* CARDS */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .info-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--primary);
+    }
+    .info-card.blue { border-left-color: var(--secondary); }
+    .info-card.green { border-left-color: var(--success); }
+    .info-card h3 { color: var(--primary); margin-top: 0; }
+    .info-card.blue h3 { color: var(--secondary); }
+    .info-card.green h3 { color: var(--success); }
+
+    /* BADGE */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .badge-red { background: #fde8e8; color: var(--primary); }
+    .badge-blue { background: #e8f0fe; color: var(--secondary); }
+    .badge-green { background: #e8faf5; color: var(--success); }
+
+    /* FORMULA BOX */
+    .formula-box {
+      background: #fff3f3;
+      border: 2px solid var(--primary);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      text-align: center;
+      margin: 12px 0;
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+    .formula-box .arrow { color: var(--secondary); }
+
+    /* PROPERTY LIST */
+    .prop-list { list-style: none; padding: 0; }
+    .prop-list li {
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .prop-list li::before {
+      content: "⚗️";
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* FLIP CARDS */
+    .flip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .flip-card {
+      height: 160px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+    .flip-card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s;
+    }
+    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .flip-front {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+    }
+    .flip-front .acid-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+    .flip-front .hint { font-size: 0.75rem; opacity: 0.8; }
+    .flip-back {
+      background: var(--card-bg);
+      transform: rotateY(180deg);
+      border: 2px solid var(--border);
+    }
+    .flip-back .formula { font-family: 'Courier New', monospace; font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+    .flip-back .ion-name { font-size: 0.85rem; color: var(--secondary); margin-top: 4px; }
+    .flip-back .rest { font-family: 'Courier New', monospace; font-size: 1rem; color: var(--success); margin-top: 4px; }
+    .flip-back .label { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+    /* RESET BUTTON */
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .btn-secondary { background: var(--secondary); color: white; }
+    .btn-secondary:hover { background: #336a8a; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #228176; }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    .btn-outline:hover { background: var(--primary); color: white; }
+
+    /* QUIZ */
+    .quiz-container { margin-top: 8px; }
+    .quiz-question {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .quiz-question .q-number {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .quiz-question .q-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+    .quiz-option {
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+      background: white;
+      text-align: left;
+    }
+    .quiz-option:hover:not(.disabled) { border-color: var(--secondary); background: #f0f7ff; }
+    .quiz-option.correct { border-color: var(--success); background: #e8faf5; color: #1a7566; }
+    .quiz-option.wrong { border-color: var(--danger); background: #fef0ec; color: #c0392b; }
+    .quiz-option.disabled { cursor: default; }
+    .quiz-feedback {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.correct-fb { background: #e8faf5; color: #1a7566; border: 1px solid var(--success); }
+    .quiz-feedback.wrong-fb { background: #fef0ec; color: #c0392b; border: 1px solid var(--danger); }
+
+    .quiz-score {
+      background: linear-gradient(135deg, var(--secondary), #2c6e8a);
+      color: white;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score .score-number { font-size: 3rem; font-weight: 700; }
+    .quiz-score .score-label { font-size: 1rem; opacity: 0.9; }
+    .quiz-score .score-msg { font-size: 1.1rem; margin-top: 8px; font-weight: 600; }
+
+    /* PROGRESS */
+    .progress-bar-wrap {
+      background: #e9ecef;
+      border-radius: 20px;
+      height: 8px;
+      margin: 8px 0 16px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      border-radius: 20px;
+      transition: width 0.4s;
+    }
+
+    /* TABLE */
+    .acid-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .acid-table th {
+      background: var(--primary);
+      color: white;
+      padding: 12px 14px;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+    .acid-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .acid-table tr:last-child td { border-bottom: none; }
+    .acid-table tr:hover td { background: #f8f9fa; }
+    .mono { font-family: 'Courier New', monospace; font-weight: 600; }
+
+    /* KARTEIKARTEN MODE */
+    .karteikarte-container { text-align: center; padding: 20px 0; }
+    .karteikarte-display {
+      perspective: 1200px;
+      width: 100%;
+      max-width: 440px;
+      height: 280px;
+      margin: 0 auto 20px;
+      cursor: pointer;
+    }
+    .karteikarte-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+    .karteikarte-display.flipped .karteikarte-inner { transform: rotateY(180deg); }
+    .karte-front, .karte-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    }
+    .karte-front {
+      background: linear-gradient(135deg, var(--primary), #a4161a);
+      color: white;
+    }
+    .karte-back {
+      background: white;
+      transform: rotateY(180deg);
+    }
+    .karte-front .karte-label { font-size: 0.85rem; opacity: 0.8; margin-bottom: 12px; }
+    .karte-front .karte-title { font-size: 1.6rem; font-weight: 700; }
+    .karte-front .karte-hint { font-size: 0.8rem; opacity: 0.7; margin-top: 12px; }
+    .karte-back .karte-formula { font-family: 'Courier New', monospace; font-size: 2rem; font-weight: 700; color: var(--primary); }
+    .karte-back .karte-ion { font-size: 1rem; color: var(--secondary); margin-top: 8px; font-weight: 600; }
+    .karte-back .karte-rest { font-family: 'Courier New', monospace; font-size: 1.2rem; color: var(--success); margin-top: 6px; }
+    .karte-back .karte-restlabel { font-size: 0.75rem; color: var(--muted); }
+    .karte-back .karte-synonym { font-size: 0.85rem; color: var(--muted); margin-top: 8px; font-style: italic; }
+
+    .karte-controls { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+    .karte-counter { color: var(--muted); font-size: 0.9rem; margin: 8px 0; }
+
+    /* OXONIUM SECTION */
+    .reaction-step {
+      background: white;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--secondary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .reaction-step .step-num {
+      font-size: 0.75rem;
+      color: var(--secondary);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* INDICATOR */
+    .indicator-box {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .indicator-item {
+      flex: 1;
+      min-width: 120px;
+      padding: 14px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      h1 { font-size: 1.4rem; }
+      .flip-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* WELCOME */
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--primary), #a4161a);
+      color: white;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .welcome-banner h1 { color: white; font-size: 2rem; }
+    .welcome-banner p { opacity: 0.9; font-size: 1rem; margin-top: 8px; }
+
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .topic-card {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+      text-align: center;
+    }
+    .topic-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .topic-card .topic-icon { font-size: 2rem; margin-bottom: 8px; }
+    .topic-card .topic-name { font-weight: 600; font-size: 0.95rem; color: var(--text); }
+    .topic-card .topic-desc { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-title">⚗️ Säuren – Klasse 9</div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showSection('start')">🏠 Start</div>
+    <div class="nav-tab" onclick="showSection('eigenschaften')">1. Eigenschaften</div>
+    <div class="nav-tab" onclick="showSection('reaktion')">2. Reaktionsgleichungen</div>
+    <div class="nav-tab" onclick="showSection('saeuren')">3. Säuren-Karten</div>
+    <div class="nav-tab" onclick="showSection('oxonium')">4. Oxoniumionen</div>
+    <div class="nav-tab" onclick="showSection('quiz')">🎯 Quiz</div>
+  </div>
+</nav>
+
+<!-- START -->
+<div id="start" class="section active">
+  <div class="welcome-banner">
+    <h1>⚗️ Säuren – Lernwebsite</h1>
+    <p>Alles was du für deinen Test morgen brauchst. Klick dich durch alle Bereiche!</p>
+  </div>
+  <h2>📚 Themenübersicht</h2>
+  <div class="topic-grid">
+    <div class="topic-card" onclick="showSection('eigenschaften')">
+      <div class="topic-icon">🔬</div>
+      <div class="topic-name">Eigenschaften</div>
+      <div class="topic-desc">Merkmal saurer Lösungen, pH-Wert, Indikatoren</div>
+    </div>
+    <div class="topic-card" onclick="showSection('reaktion')">
+      <div class="topic-icon">⚗️</div>
+      <div class="topic-name">Reaktionsgleichungen</div>
+      <div class="topic-desc">Säure + Wasser, Protonenübergabe</div>
+    </div>
+    <div class="topic-card" onclick="showSection('saeuren')">
+      <div class="topic-icon">🃏</div>
+      <div class="topic-name">Säuren-Karten</div>
+      <div class="topic-desc">8 Säuren mit Formel, Ionname & Säurerest</div>
+    </div>
+    <div class="topic-card" onclick="showSection('oxonium')">
+      <div class="topic-icon">⚡</div>
+      <div class="topic-name">Oxoniumionen</div>
+      <div class="topic-desc">H₃O⁺ Bildung, Protonentheorie</div>
+    </div>
+    <div class="topic-card" onclick="showSection('quiz')">
+      <div class="topic-icon">🎯</div>
+      <div class="topic-name">Quiz</div>
+      <div class="topic-desc">Teste dein Wissen mit 20 Fragen!</div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:24px; background: #fff9e6; border: 2px solid var(--warning);">
+    <h3 style="color:#b7791f;">💡 Tipp für heute Abend</h3>
+    <p>1. Erst alle <strong>Eigenschaften</strong> lesen und die Karteikarten durchgehen.</p>
+    <p>2. Die <strong>Säuren-Karten</strong> so oft wiederholen bis du alle auswendig kannst.</p>
+    <p>3. Zum Schluss das <strong>Quiz</strong> machen – Ziel: 18/20 Punkte!</p>
+  </div>
+</div>
+
+<!-- EIGENSCHAFTEN -->
+<div id="eigenschaften" class="section">
+  <h1>🔬 Eigenschaften von Säuren</h1>
+
+  <h2>Allgemeine Eigenschaften saurer Lösungen</h2>
+  <ul class="prop-list">
+    <li><strong>Saurer Geschmack</strong> – z.B. Essig, Zitronensaft (niemals unbekannte Säuren probieren!)</li>
+    <li><strong>Elektrische Leitfähigkeit</strong> – Säuren sind Elektrolyte, sie leiten Strom in wässriger Lösung</li>
+    <li><strong>Indikatorwirkung</strong> – Lackmus wird rot, Universalindikator zeigt rot/orange</li>
+    <li><strong>pH-Wert &lt; 7</strong> – je kleiner der pH-Wert, desto stärker die Säure</li>
+    <li><strong>Reaktion mit unedlen Metallen</strong> – es entsteht Wasserstoffgas (H₂) und ein Salz</li>
+    <li><strong>Neutralisation mit Laugen/Basen</strong> – Säure + Base → Salz + Wasser</li>
+    <li><strong>Korrosiv/ätzend</strong> – konzentrierte Säuren zerstören Haut und Materialien</li>
+    <li><strong>Protonengeber</strong> – Säuren geben in Wasser H⁺-Ionen (Protonen) ab → Oxoniumionen entstehen</li>
+  </ul>
+
+  <h2>Indikatoren und pH-Wert</h2>
+  <div class="indicator-box">
+    <div class="indicator-item" style="background:#ff4444;color:white;">pH 1–3<br><small>Starke Säure</small></div>
+    <div class="indicator-item" style="background:#ff8800;color:white;">pH 4–5<br><small>Schwache Säure</small></div>
+    <div class="indicator-item" style="background:#ffcc00;color:#333;">pH 6<br><small>Leicht sauer</small></div>
+    <div class="indicator-item" style="background:#4caf50;color:white;">pH 7<br><small>Neutral</small></div>
+    <div class="indicator-item" style="background:#2196f3;color:white;">pH 8–10<br><small>Basisch</small></div>
+    <div class="indicator-item" style="background:#7b1fa2;color:white;">pH 11–14<br><small>Stark basisch</small></div>
+  </div>
+
+  <div class="card-grid" style="margin-top:20px;">
+    <div class="info-card">
+      <h3>🔴 Lackmus-Indikator</h3>
+      <p>In saurer Lösung: <strong>ROT</strong></p>
+      <p>In basischer Lösung: <strong>BLAU</strong></p>
+      <p>Neutral: <strong>VIOLETT</strong></p>
+    </div>
+    <div class="info-card blue">
+      <h3>🌈 Universalindikator</h3>
+      <p>Gibt den genauen pH-Wert durch verschiedene Farben an (rot → gelb → grün → blau)</p>
+    </div>
+    <div class="info-card green">
+      <h3>🧅 Naturindikatoren</h3>
+      <p>Rotkohl, Holunderbeeren, Rote Bete – färben sich je nach pH-Wert unterschiedlich</p>
+    </div>
+  </div>
+
+  <h2>🃏 Karteikarten – Eigenschaften</h2>
+  <div class="card-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Was ist eine Säure?</div><div class="hint">Klicken zum Umdrehen</div></div>
+        <div class="flip-back"><div class="formula" style="font-size:0.9rem;">Protonendonator – gibt in Wasser H⁺ ab</div><div class="ion-name">→ Oxoniumion H₃O⁺ entsteht</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">pH-Wert bei Säuren</div><div class="hint">Klicken zum Umdrehen</div></div>
+        <div class="flip-back"><div class="formula" style="font-size:1.5rem;">pH &lt; 7</div><div class="ion-name">je kleiner → stärker sauer</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Reaktion Säure + Metall</div><div class="hint">Klicken zum Umdrehen</div></div>
+        <div class="flip-back"><div class="formula" style="font-size:0.85rem;">Metall + Säure</div><div class="ion-name">→ Salz + H₂↑</div><div class="rest">(Wasserstoff entweicht)</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Neutralisation</div><div class="hint">Klicken zum Umdrehen</div></div>
+        <div class="flip-back"><div class="formula" style="font-size:0.85rem;">Säure + Base</div><div class="ion-name">→ Salz + Wasser</div><div class="rest">pH = 7</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Lackmus in Säure</div><div class="hint">Klicken zum Umdrehen</div></div>
+        <div class="flip-back"><div class="formula" style="color:#e63946;">ROT</div><div class="ion-name">In Base: blau</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Elektrolyte</div><div class="hint">Klicken zum Umdrehen</div></div>
+        <div class="flip-back"><div class="formula" style="font-size:0.9rem;">Leiten Strom</div><div class="ion-name">weil sie in Ionen zerfallen (Dissoziation)</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REAKTION -->
+<div id="reaktion" class="section">
+  <h1>⚗️ Reaktionsgleichungen: Säure + Wasser</h1>
+
+  <div class="card" style="background:#fff3f3; border: 2px solid var(--primary);">
+    <h3>📌 Das Grundprinzip</h3>
+    <p>Wenn eine Säure in Wasser gelöst wird, gibt sie ein <strong>Proton (H⁺)</strong> an ein Wassermolekül ab. Das Wassermolekül nimmt das Proton auf und wird zum <strong>Oxoniumion (H₃O⁺)</strong>.</p>
+    <div class="formula-box">HA + H₂O <span class="arrow">⇌</span> H₃O⁺ + A⁻</div>
+    <p><small>HA = beliebige Säure | A⁻ = Säurerestanion</small></p>
+  </div>
+
+  <h2>Beispiele der 8 Säuren</h2>
+
+  <div class="reaction-step">
+    <div class="step-num">Chlorwasserstoff (HCl) in Wasser</div>
+    <div class="formula-box">HCl + H₂O <span class="arrow">→</span> H₃O⁺ + Cl⁻</div>
+    <p>HCl gibt sein Proton vollständig ab → <strong>starke Säure</strong>, vollständige Dissoziation</p>
+  </div>
+
+  <div class="reaction-step">
+    <div class="step-num">Schwefelsäure (H₂SO₄) in Wasser</div>
+    <div class="formula-box">H₂SO₄ + 2 H₂O <span class="arrow">→</span> 2 H₃O⁺ + SO₄²⁻</div>
+    <p>Zweiprotonige Säure – gibt <strong>2 Protonen</strong> ab</p>
+  </div>
+
+  <div class="reaction-step">
+    <div class="step-num">Salpetersäure (HNO₃) in Wasser</div>
+    <div class="formula-box">HNO₃ + H₂O <span class="arrow">→</span> H₃O⁺ + NO₃⁻</div>
+    <p>Starke Säure, vollständige Dissoziation</p>
+  </div>
+
+  <div class="reaction-step">
+    <div class="step-num">Essigsäure (CH₃COOH) in Wasser</div>
+    <div class="formula-box">CH₃COOH + H₂O <span class="arrow">⇌</span> H₃O⁺ + CH₃COO⁻</div>
+    <p>Schwache Säure – nur <strong>teilweise</strong> Dissoziation (Gleichgewichtspfeil!)</p>
+  </div>
+
+  <div class="reaction-step">
+    <div class="step-num">Ameisensäure (HCOOH) in Wasser</div>
+    <div class="formula-box">HCOOH + H₂O <span class="arrow">⇌</span> H₃O⁺ + HCOO⁻</div>
+    <p>Schwache Säure</p>
+  </div>
+
+  <div class="reaction-step">
+    <div class="step-num">Kohlensäure (H₂CO₃) in Wasser</div>
+    <div class="formula-box">H₂CO₃ + H₂O <span class="arrow">⇌</span> H₃O⁺ + HCO₃⁻</div>
+    <p>Erste Stufe → Hydrogencarbonat | Zweite Stufe: HCO₃⁻ + H₂O ⇌ H₃O⁺ + CO₃²⁻</p>
+  </div>
+
+  <div class="reaction-step">
+    <div class="step-num">Phosphorsäure (H₃PO₄) in Wasser</div>
+    <div class="formula-box">H₃PO₄ + H₂O <span class="arrow">⇌</span> H₃O⁺ + H₂PO₄⁻</div>
+    <p>Dreiprotonige Säure – gibt bis zu <strong>3 Protonen</strong> ab</p>
+  </div>
+
+  <div class="reaction-step">
+    <div class="step-num">Citronensäure (C₆H₈O₇) in Wasser</div>
+    <div class="formula-box">C₆H₈O₇ + H₂O <span class="arrow">⇌</span> H₃O⁺ + C₆H₇O₇⁻</div>
+    <p>Dreiprotonige schwache Säure</p>
+  </div>
+
+  <div class="card" style="margin-top:20px; background:#e8faf5; border: 2px solid var(--success);">
+    <h3 style="color:var(--success);">✅ Merke: Starke vs. Schwache Säuren</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px;">
+      <div>
+        <strong>Starke Säuren (→)</strong><br>
+        <span class="badge badge-red">HCl</span>
+        <span class="badge badge-red">H₂SO₄</span>
+        <span class="badge badge-red">HNO₃</span>
+        <p style="margin-top:8px; font-size:0.9rem;">Vollständige Dissoziation in Wasser</p>
+      </div>
+      <div>
+        <strong>Schwache Säuren (⇌)</strong><br>
+        <span class="badge badge-blue">CH₃COOH</span>
+        <span class="badge badge-blue">HCOOH</span>
+        <span class="badge badge-blue">H₂CO₃</span>
+        <p style="margin-top:8px; font-size:0.9rem;">Nur teilweise Dissoziation (Gleichgewicht)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SÄUREN KARTEN -->
+<div id="saeuren" class="section">
+  <h1>🃏 Die 8 Säuren – Lernkarten</h1>
+  <p>Klicke auf eine Karte zum Umdrehen. Nutze den <strong>Übungsmodus</strong> unten zum Wiederholen!</p>
+
+  <h2>📋 Übersichtstabelle</h2>
+  <div style="overflow-x:auto; margin-bottom:24px;">
+    <table class="acid-table">
+      <thead>
+        <tr>
+          <th>Säurename</th>
+          <th>Formel</th>
+          <th>Name des Ions (Säurerest)</th>
+          <th>Säurerest-Formel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Kohlensäure</strong></td><td class="mono">H₂CO₃</td><td>Hydrogencarbonat / Carbonat</td><td class="mono">HCO₃⁻ / CO₃²⁻</td></tr>
+        <tr><td><strong>Essigsäure</strong> <small>(Ethansäure)</small></td><td class="mono">CH₃COOH</td><td>Acetat (Ethanoat)</td><td class="mono">CH₃COO⁻</td></tr>
+        <tr><td><strong>Ameisensäure</strong> <small>(Methansäure)</small></td><td class="mono">HCOOH</td><td>Formiat (Methanoat)</td><td class="mono">HCOO⁻</td></tr>
+        <tr><td><strong>Citronensäure</strong></td><td class="mono">C₆H₈O₇</td><td>Citrat</td><td class="mono">C₆H₅O₇³⁻</td></tr>
+        <tr><td><strong>Salpetersäure</strong></td><td class="mono">HNO₃</td><td>Nitrat</td><td class="mono">NO₃⁻</td></tr>
+        <tr><td><strong>Phosphorsäure</strong></td><td class="mono">H₃PO₄</td><td>Phosphat</td><td class="mono">PO₄³⁻</td></tr>
+        <tr><td><strong>Schwefelsäure</strong></td><td class="mono">H₂SO₄</td><td>Sulfat</td><td class="mono">SO₄²⁻</td></tr>
+        <tr><td><strong>Chlorwasserstoff</strong> <small>(→ Salzsäure in H₂O)</small></td><td class="mono">HCl</td><td>Chlorid</td><td class="mono">Cl⁻</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🔄 Schnell-Karten (alle 8)</h2>
+  <div class="flip-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Kohlensäure</div><div class="hint">Tippen zum Umdrehen</div></div>
+        <div class="flip-back">
+          <div class="formula">H₂CO₃</div>
+          <div class="label">Ion 1. Stufe:</div><div class="ion-name">Hydrogencarbonat HCO₃⁻</div>
+          <div class="label">Ion 2. Stufe:</div><div class="rest">Carbonat CO₃²⁻</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Essigsäure</div><div class="hint">Tippen zum Umdrehen</div></div>
+        <div class="flip-back">
+          <div class="formula">CH₃COOH</div>
+          <div class="ion-name">Acetat</div>
+          <div class="rest">CH₃COO⁻</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Ameisensäure</div><div class="hint">Tippen zum Umdrehen</div></div>
+        <div class="flip-back">
+          <div class="formula">HCOOH</div>
+          <div class="ion-name">Formiat</div>
+          <div class="rest">HCOO⁻</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Citronensäure</div><div class="hint">Tippen zum Umdrehen</div></div>
+        <div class="flip-back">
+          <div class="formula">C₆H₈O₇</div>
+          <div class="ion-name">Citrat</div>
+          <div class="rest">C₆H₅O₇³⁻</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Salpetersäure</div><div class="hint">Tippen zum Umdrehen</div></div>
+        <div class="flip-back">
+          <div class="formula">HNO₃</div>
+          <div class="ion-name">Nitrat</div>
+          <div class="rest">NO₃⁻</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Phosphorsäure</div><div class="hint">Tippen zum Umdrehen</div></div>
+        <div class="flip-back">
+          <div class="formula">H₃PO₄</div>
+          <div class="ion-name">Phosphat</div>
+          <div class="rest">PO₄³⁻</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Schwefelsäure</div><div class="hint">Tippen zum Umdrehen</div></div>
+        <div class="flip-back">
+          <div class="formula">H₂SO₄</div>
+          <div class="ion-name">Sulfat</div>
+          <div class="rest">SO₄²⁻</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Chlorwasserstoff</div><div class="hint">Tippen zum Umdrehen</div></div>
+        <div class="flip-back">
+          <div class="formula">HCl</div>
+          <div class="ion-name">Chlorid</div>
+          <div class="rest">Cl⁻</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>🎴 Übungsmodus – Karte für Karte</h2>
+  <div class="karteikarte-container">
+    <div class="karte-counter" id="karteCounter">Karte 1 von 8</div>
+    <div class="karteikarte-display" id="karteDisplay" onclick="flipKarte()">
+      <div class="karteikarte-inner" id="karteInner">
+        <div class="karte-front" id="karteFront">
+          <div class="karte-label">Säurename</div>
+          <div class="karte-title" id="karteName">Kohlensäure</div>
+          <div class="karte-hint">Tippen für Formel & Säurerest</div>
+        </div>
+        <div class="karte-back" id="karteBack">
+          <div class="karte-formula" id="karteFormula">H₂CO₃</div>
+          <div class="karte-restlabel">Ionname:</div>
+          <div class="karte-ion" id="karteIon">Hydrogencarbonat</div>
+          <div class="karte-restlabel">Säurerest:</div>
+          <div class="karte-rest" id="karteRest">HCO₃⁻</div>
+          <div class="karte-synonym" id="karteSynonym"></div>
+        </div>
+      </div>
+    </div>
+    <div class="karte-controls">
+      <button class="btn btn-outline" onclick="prevKarte()">← Zurück</button>
+      <button class="btn btn-primary" onclick="flipKarte()">Umdrehen</button>
+      <button class="btn btn-secondary" onclick="nextKarte()">Weiter →</button>
+      <button class="btn btn-success" onclick="shuffleKarten()">🔀 Mischen</button>
+    </div>
+  </div>
+</div>
+
+<!-- OXONIUM -->
+<div id="oxonium" class="section">
+  <h1>⚡ Bildung von Oxoniumionen</h1>
+
+  <div class="card" style="background: linear-gradient(135deg, #e8f4f8, #d1ecf1); border: 2px solid var(--secondary);">
+    <h3 style="color:var(--secondary);">Was ist ein Oxoniumion?</h3>
+    <p>Das <strong>Oxoniumion (H₃O⁺)</strong> entsteht, wenn ein Wassermolekül ein Proton (H⁺) von einer Säure aufnimmt. Es ist die eigentliche Ursache für saure Eigenschaften in wässriger Lösung.</p>
+    <div class="formula-box">H₂O + H⁺ → H₃O⁺</div>
+  </div>
+
+  <h2>Schritt-für-Schritt Erklärung</h2>
+
+  <div class="reaction-step">
+    <div class="step-num">Schritt 1 – Die Säure dissoziiert</div>
+    <p>Die Säure HA zerfällt in Wasser in ein Proton (H⁺) und ein Säurerestanion (A⁻).</p>
+    <div class="formula-box">HA → H⁺ + A⁻</div>
+  </div>
+
+  <div class="reaction-step">
+    <div class="step-num">Schritt 2 – Proton wird vom Wasser aufgenommen</div>
+    <p>Das freigesetzte Proton H⁺ bindet sich sofort an ein Wassermolekül H₂O. Das freie Elektronenpaar des Sauerstoffs im Wasser zieht das Proton an.</p>
+    <div class="formula-box">H₂O + H⁺ → H₃O⁺</div>
+  </div>
+
+  <div class="reaction-step">
+    <div class="step-num">Schritt 3 – Gesamtreaktion</div>
+    <p>Zusammengefasst schreibt man die Reaktion als Protonenübertragung von der Säure auf das Wasser:</p>
+    <div class="formula-box">HA + H₂O → H₃O⁺ + A⁻</div>
+    <p><span class="badge badge-red">HA</span> = Säure (Protonendonator) &nbsp; <span class="badge badge-blue">H₂O</span> = Base (Protonenakzeptor)</p>
+  </div>
+
+  <div class="reaction-step">
+    <div class="step-num">Beispiel: HCl in Wasser</div>
+    <div class="formula-box">HCl + H₂O → H₃O⁺ + Cl⁻</div>
+    <p>HCl gibt sein Proton an H₂O ab → Chloridion Cl⁻ und Oxoniumion H₃O⁺ entstehen</p>
+  </div>
+
+  <div class="card-grid" style="margin-top:20px;">
+    <div class="info-card">
+      <h3>🔵 Oxoniumion H₃O⁺</h3>
+      <p>= 1 Sauerstoffatom + 3 Wasserstoffatome + positive Ladung</p>
+      <p>Früher auch <strong>Hydroniumion</strong> genannt</p>
+      <p>Verantwortlich für den <strong>sauren pH-Wert</strong></p>
+    </div>
+    <div class="info-card blue">
+      <h3>⚡ Protonentheorie (Brønsted)</h3>
+      <p><strong>Säure</strong> = Protonendonator (gibt H⁺ ab)</p>
+      <p><strong>Base</strong> = Protonenakzeptor (nimmt H⁺ auf)</p>
+      <p>Wasser wirkt als Base!</p>
+    </div>
+    <div class="info-card green">
+      <h3>📊 Je mehr H₃O⁺ ...</h3>
+      <p>... desto <strong>niedriger der pH-Wert</strong></p>
+      <p>... desto <strong>stärker die Säure</strong></p>
+      <p>Bei pH 7: gleich viel H₃O⁺ und OH⁻</p>
+    </div>
+  </div>
+
+  <h2>🃏 Karteikarten – Oxoniumionen</h2>
+  <div class="card-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Was ist H₃O⁺?</div><div class="hint">Klicken</div></div>
+        <div class="flip-back"><div class="formula">Oxoniumion</div><div class="ion-name">entsteht wenn H₂O ein Proton aufnimmt</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Protonendonator</div><div class="hint">Klicken</div></div>
+        <div class="flip-back"><div class="formula">Säure</div><div class="ion-name">gibt H⁺ ab</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Protonenakzeptor</div><div class="hint">Klicken</div></div>
+        <div class="flip-back"><div class="formula">Base / Wasser</div><div class="ion-name">nimmt H⁺ auf</div></div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-card-inner">
+        <div class="flip-front"><div class="acid-name">Reaktionsgleichung</div><div class="hint">Klicken</div></div>
+        <div class="flip-back"><div class="formula" style="font-size:0.85rem;">HA + H₂O →</div><div class="ion-name">H₃O⁺ + A⁻</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="section">
+  <h1>🎯 Wissens-Quiz</h1>
+  <p>Teste dein Wissen – 20 Fragen aus allen Themenbereichen!</p>
+
+  <div class="quiz-score" id="quizScore">
+    <div class="score-number" id="scoreNumber">0/20</div>
+    <div class="score-label">Richtige Antworten</div>
+    <div class="score-msg" id="scoreMsg"></div>
+    <button class="btn btn-primary" style="margin-top:16px;" onclick="resetQuiz()">🔄 Neu starten</button>
+  </div>
+
+  <div id="progressWrap" style="margin-bottom:8px;">
+    <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--muted);">
+      <span>Fortschritt</span>
+      <span id="progressText">0 / 20</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+  </div>
+
+  <div id="quizContainer" class="quiz-container"></div>
+
+  <div style="text-align:center; margin-top:16px;" id="quizSubmitArea">
+    <button class="btn btn-primary" onclick="checkQuiz()" id="submitBtn">✅ Auswerten</button>
+  </div>
+</div>
+
+<script>
+  // NAV
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const tabs = document.querySelectorAll('.nav-tab');
+    const map = { start:0, eigenschaften:1, reaktion:2, saeuren:3, oxonium:4, quiz:5 };
+    if (map[id] !== undefined) tabs[map[id]].classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  // KARTEN DATA
+  const kartenData = [
+    { name: 'Kohlensäure', formula: 'H₂CO₃', ion: 'Hydrogencarbonat', rest: 'HCO₃⁻', synonym: '(2. Stufe: Carbonat CO₃²⁻)' },
+    { name: 'Essigsäure', formula: 'CH₃COOH', ion: 'Acetat', rest: 'CH₃COO⁻', synonym: 'Ethansäure' },
+    { name: 'Ameisensäure', formula: 'HCOOH', ion: 'Formiat', rest: 'HCOO⁻', synonym: 'Methansäure' },
+    { name: 'Citronensäure', formula: 'C₆H₈O₇', ion: 'Citrat', rest: 'C₆H₅O₇³⁻', synonym: '' },
+    { name: 'Salpetersäure', formula: 'HNO₃', ion: 'Nitrat', rest: 'NO₃⁻', synonym: '' },
+    { name: 'Phosphorsäure', formula: 'H₃PO₄', ion: 'Phosphat', rest: 'PO₄³⁻', synonym: '' },
+    { name: 'Schwefelsäure', formula: 'H₂SO₄', ion: 'Sulfat', rest: 'SO₄²⁻', synonym: '' },
+    { name: 'Chlorwasserstoff', formula: 'HCl', ion: 'Chlorid', rest: 'Cl⁻', synonym: '(in Wasser = Salzsäure)' },
+  ];
+  let karteIndex = 0;
+  let karteFlipped = false;
+  let kartenOrder = [...kartenData];
+
+  function updateKarte() {
+    const k = kartenOrder[karteIndex];
+    document.getElementById('karteName').textContent = k.name;
+    document.getElementById('karteFormula').textContent = k.formula;
+    document.getElementById('karteIon').textContent = k.ion;
+    document.getElementById('karteRest').textContent = k.rest;
+    document.getElementById('karteSynonym').textContent = k.synonym;
+    document.getElementById('karteCounter').textContent = `Karte ${karteIndex+1} von ${kartenOrder.length}`;
+    karteFlipped = false;
+    document.getElementById('karteDisplay').classList.remove('flipped');
+  }
+
+  function flipKarte() {
+    karteFlipped = !karteFlipped;
+    document.getElementById('karteDisplay').classList.toggle('flipped', karteFlipped);
+  }
+
+  function nextKarte() {
+    karteIndex = (karteIndex + 1) % kartenOrder.length;
+    updateKarte();
+  }
+
+  function prevKarte() {
+    karteIndex = (karteIndex - 1 + kartenOrder.length) % kartenOrder.length;
+    updateKarte();
+  }
+
+  function shuffleKarten() {
+    for (let i = kartenOrder.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [kartenOrder[i], kartenOrder[j]] = [kartenOrder[j], kartenOrder[i]];
+    }
+    karteIndex = 0;
+    updateKarte();
+  }
+
+  // QUIZ DATA
+  const allQuestions = [
+    { q: "Was ist der pH-Wert einer Säure?", opts: ["pH < 7", "pH = 7", "pH > 7", "pH = 0"], correct: 0, explain: "Säuren haben immer einen pH-Wert kleiner als 7." },
+    { q: "Welche Farbe nimmt Lackmus in einer Säure an?", opts: ["Rot", "Blau", "Grün", "Gelb"], correct: 0, explain: "Lackmus färbt sich in saurer Lösung rot." },
+    { q: "Was ist die Formel der Schwefelsäure?", opts: ["H₂SO₄", "HNO₃", "H₃PO₄", "HCl"], correct: 0, explain: "Schwefelsäure hat die Formel H₂SO₄." },
+    { q: "Wie heißt das Säurerestanion der Salpetersäure?", opts: ["Nitrat NO₃⁻", "Sulfat SO₄²⁻", "Chlorid Cl⁻", "Phosphat PO₄³⁻"], correct: 0, explain: "Das Anion der Salpetersäure HNO₃ ist das Nitrat-Ion NO₃⁻." },
+    { q: "Welche Formel hat Chlorwasserstoff?", opts: ["HCl", "NaCl", "HClO", "ClH₂"], correct: 0, explain: "Chlorwasserstoff hat die Formel HCl. In Wasser gelöst heißt es Salzsäure." },
+    { q: "Was entsteht bei der Reaktion Säure + Metall?", opts: ["Salz + Wasserstoff", "Salz + Wasser", "Oxid + Wasser", "Nur Gas"], correct: 0, explain: "Metall + Säure → Salz + Wasserstoff (H₂↑)" },
+    { q: "Was ist ein Oxoniumion?", opts: ["H₃O⁺", "OH⁻", "H₂O", "H⁺"], correct: 0, explain: "Das Oxoniumion (H₃O⁺) entsteht wenn Wasser ein Proton aufnimmt." },
+    { q: "Welche Säure hat die Formel HCOOH?", opts: ["Ameisensäure", "Essigsäure", "Kohlensäure", "Salpetersäure"], correct: 0, explain: "HCOOH ist die Ameisensäure (Methansäure)." },
+    { q: "Wie lautet das Säurerestanion der Essigsäure?", opts: ["Acetat CH₃COO⁻", "Formiat HCOO⁻", "Citrat C₆H₅O₇³⁻", "Carbonat CO₃²⁻"], correct: 0, explain: "Das Anion der Essigsäure CH₃COOH ist Acetat CH₃COO⁻." },
+    { q: "Was ist ein Protonendonator?", opts: ["Eine Säure", "Eine Base", "Wasser", "Ein Salz"], correct: 0, explain: "Laut Brønsted-Theorie ist eine Säure ein Protonendonator – sie gibt H⁺ ab." },
+    { q: "Wie heißt das erste Dissoziationsprodukt der Kohlensäure?", opts: ["Hydrogencarbonat HCO₃⁻", "Carbonat CO₃²⁻", "Sulfat SO₄²⁻", "Citrat"], correct: 0, explain: "H₂CO₃ → H⁺ + HCO₃⁻ (Hydrogencarbonat) in der ersten Stufe." },
+    { q: "Welches Anion hat die Phosphorsäure?", opts: ["Phosphat PO₄³⁻", "Phosphit PO₃³⁻", "Sulfat SO₄²⁻", "Nitrat NO₃⁻"], correct: 0, explain: "H₃PO₄ gibt 3 Protonen ab → Phosphat PO₄³⁻." },
+    { q: "Was ist eine Neutralisation?", opts: ["Säure + Base → Salz + Wasser", "Metall + Säure → Salz + H₂", "Säure + Wasser → H₃O⁺ + A⁻", "Base + Wasser → OH⁻"], correct: 0, explain: "Bei der Neutralisation reagieren Säure und Base zu Salz und Wasser, pH = 7." },
+    { q: "Welche Formel hat Phosphorsäure?", opts: ["H₃PO₄", "H₂PO₄", "HPO₃", "PO₄H₃"], correct: 0, explain: "Phosphorsäure hat die Formel H₃PO₄." },
+    { q: "Was bedeutet der Gleichgewichtspfeil ⇌ in einer Reaktionsgleichung?", opts: ["Teilweise Dissoziation (schwache Säure)", "Vollständige Dissoziation", "Keine Reaktion", "Rückreaktion dominant"], correct: 0, explain: "⇌ zeigt ein Gleichgewicht – die Säure dissoziiert nur teilweise (schwache Säure)." },
+    { q: "Welche der folgenden Säuren ist eine starke Säure?", opts: ["Salzsäure HCl", "Essigsäure CH₃COOH", "Kohlensäure H₂CO₃", "Ameisensäure HCOOH"], correct: 0, explain: "HCl ist eine starke Säure – sie dissoziiert vollständig in Wasser." },
+    { q: "Was ist der andere Name für Essigsäure?", opts: ["Ethansäure", "Methansäure", "Propansäure", "Butansäure"], correct: 0, explain: "Essigsäure = Ethansäure (systematischer Name, da 2 C-Atome)." },
+    { q: "Was ist das Säurerestanion der Schwefelsäure?", opts: ["Sulfat SO₄²⁻", "Sulfit SO₃²⁻", "Sulfid S²⁻", "Thiosulfat S₂O₃²⁻"], correct: 0, explain: "H₂SO₄ gibt 2 Protonen ab → Sulfat SO₄²⁻." },
+    { q: "Welche Rolle spielt Wasser bei der Säure-Base-Reaktion?", opts: ["Protonenakzeptor (Base)", "Protonendonator (Säure)", "Katalysator", "Keine Rolle"], correct: 0, explain: "Wasser nimmt das Proton der Säure auf → ist Protonenakzeptor = Base nach Brønsted." },
+    { q: "Wie viele Protonen kann Phosphorsäure (H₃PO₄) abgeben?", opts: ["3 Protonen", "1 Proton", "2 Protonen", "4 Protonen"], correct: 0, explain: "H₃PO₄ hat 3 'saure' Wasserstoffatome und kann 3 Protonen abgeben → dreiprotonige Säure." },
+  ];
+
+  // Shuffle options for display
+  function buildQuiz() {
+    const container = document.getElementById('quizContainer');
+    container.innerHTML = '';
+    allQuestions.forEach((q, i) => {
+      const optsCopy = [...q.opts];
+      const correctText = optsCopy[q.correct];
+      // shuffle
+      for (let j = optsCopy.length - 1; j > 0; j--) {
+        const k = Math.floor(Math.random() * (j + 1));
+        [optsCopy[j], optsCopy[k]] = [optsCopy[k], optsCopy[j]];
+      }
+      const newCorrect = optsCopy.indexOf(correctText);
+
+      const div = document.createElement('div');
+      div.className = 'quiz-question';
+      div.innerHTML = `
+        <div class="q-number">Frage ${i+1} von 20</div>
+        <div class="q-text">${q.q}</div>
+        <div class="quiz-options" id="opts_${i}">
+          ${optsCopy.map((o,j) => `<button class="quiz-option" data-q="${i}" data-o="${j}" data-correct="${j === newCorrect}" onclick="selectOption(this)">${o}</button>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="fb_${i}"></div>
+      `;
+      container.appendChild(div);
+    });
+    updateProgress();
+  }
+
+  let answered = 0;
+  function selectOption(btn) {
+    const q = btn.dataset.q;
+    const isCorrect = btn.dataset.correct === 'true';
+    const opts = document.querySelectorAll(`[data-q="${q}"]`);
+    const wasAnswered = [...opts].some(o => o.classList.contains('correct') || o.classList.contains('wrong'));
+    if (wasAnswered) return;
+
+    opts.forEach(o => {
+      o.classList.add('disabled');
+      if (o.dataset.correct === 'true') o.classList.add('correct');
+    });
+    if (!isCorrect) btn.classList.add('wrong');
+
+    answered++;
+    updateProgress();
+
+    const fb = document.getElementById(`fb_${q}`);
+    fb.textContent = allQuestions[q].explain;
+    fb.className = `quiz-feedback show ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+  }
+
+  function updateProgress() {
+    const pct = (answered / 20) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressText').textContent = `${answered} / 20`;
+  }
+
+  function checkQuiz() {
+    let correct = 0;
+    allQuestions.forEach((_, i) => {
+      const opts = document.querySelectorAll(`[data-q="${i}"]`);
+      opts.forEach(o => {
+        if (o.classList.contains('correct')) correct++;
+      });
+    });
+    // Also count unanswered as wrong (force answer)
+    const score = document.getElementById('quizScore');
+    score.classList.add('show');
+    document.getElementById('scoreNumber').textContent = `${correct}/20`;
+    let msg = '';
+    if (correct >= 19) msg = '🏆 Perfekt! Du bekommst eine 1+!';
+    else if (correct >= 17) msg = '⭐ Sehr gut! Das wird eine 1!';
+    else if (correct >= 15) msg = '😊 Gut! Eine 2 ist sicher!';
+    else if (correct >= 12) msg = '📚 Noch ein bisschen üben!';
+    else msg = '💪 Nochmal von vorne – du schaffst das!';
+    document.getElementById('scoreMsg').textContent = msg;
+    score.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('submitBtn').style.display = 'none';
+  }
+
+  function resetQuiz() {
+    answered = 0;
+    document.getElementById('quizScore').classList.remove('show');
+    document.getElementById('submitBtn').style.display = 'inline-block';
+    buildQuiz();
+    window.scrollTo(0,0);
+  }
+
+  // INIT
+  buildQuiz();
+  updateKarte();
+</script>
+</body>
+</html>
