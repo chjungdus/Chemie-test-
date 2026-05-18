@@ -1064,12 +1064,10 @@
   function checkQuiz() {
     let correct = 0;
     allQuestions.forEach((_, i) => {
-      const opts = document.querySelectorAll(`[data-q="${i}"]`);
-      opts.forEach(o => {
-        if (o.classList.contains('correct')) correct++;
-      });
+      const fb = document.getElementById(`fb_${i}`);
+      if (fb && fb.classList.contains('correct-fb')) correct++;
     });
-    // Also count unanswered as wrong (force answer)
+
     const score = document.getElementById('quizScore');
     score.classList.add('show');
     document.getElementById('scoreNumber').textContent = `${correct}/20`;
